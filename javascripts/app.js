@@ -4,9 +4,12 @@ Twitter = {
 Twitter.search = function(opts){
 //opts.q
 //opts.callback
-var len = Twitter._callbacks.push(function(data){
+
+var callback = function(data){
     opts.callback(data); 
-  })
+    Twitter._callbacks = Twitter._callbacks.without(callback)
+  }
+var len = Twitter._callbacks.push(callback)
 document.body.insert("<script src='http://search.twitter.com/search.json?q="+escape(opts.q)+"&callback=Twitter._callbacks["+(len-1).toString()+"]'>")
 }
 
