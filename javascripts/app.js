@@ -5,11 +5,25 @@ document.body.insert("<script src='http://search.twitter.com/search.json?q="+esc
 
 function TwitterSlurp(data){
 var container = $('all-tweets');
+tweets = data.results;
+
 data.results.each(function(e){
- container.insert(Object.toJSON(e))
-  container.insert('<br>')
+ 
+ container.insert(buildCube(
+   e.text
+ ))
+ 
 })
 
 }
 
 Twitter.search('#jazzfest')
+
+function buildCube(content){
+  return new Element('div',{'class':'generic twotwenty'}).insert(content)
+}
+
+/*
+generic twotwenty
+
+*/
