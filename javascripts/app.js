@@ -17,7 +17,7 @@ tweets = data.results;
 data.results.each(function(e){
  
  container.insert(buildCube(
-   e.text
+   linkTweetText(e.text)
  ))
  
 })
@@ -28,6 +28,10 @@ Twitter.search({q:'#jazzfest',callback:Twitter.Slurp})
 
 function buildCube(content){
   return new Element('div',{'class':'generic twotwenty'}).insert(content)
+}
+
+function linkTweetText(text){
+  return text.gsub(/(http:\/\/[^ ]+)/,'<a href="#{1}">#{1}</a>').gsub(/@([^ ]+)/,'@<a href="http://twitter.com/#{1}">#{1}</a>')
 }
 
 /*
