@@ -10,30 +10,31 @@ var len = Twitter._callbacks.push(function(data){
 document.body.insert("<script src='http://search.twitter.com/search.json?q="+escape(opts.q)+"&callback=Twitter._callbacks["+(len-1).toString()+"]'>")
 }
 
-Twitter.Slurp=function (data){
-var container = $('all-tweets');
-tweets = data.results;
-
-data.results.each(function(e){
- 
- container.insert(buildCube(
-   linkTweetText(e.text)
- ))
- 
+Twitter.search({q:'#jazzfest',
+  callback: function (data){
+    var container = $('all-tweets');
+    tweets = data.results;
+    tweets.each(function(e){
+     container.insert(build_cube(
+       link_user(e.from_user) +' '+ link_tweet_text(e.text)
+     ))
+     
+    })
+   container.insert(new Element('div',{'class':'end'}))
+  }
 })
 
+function build_cube(content,opts){
+  return new Element('div',{'class':'generic twotwenty'}).insert(content);
 }
 
-Twitter.search({q:'#jazzfest',callback:Twitter.Slurp})
-
-function buildCube(content){
-  return new Element('div',{'class':'generic twotwenty'}).insert(content)
+function link_tweet_text(text){
+  return text.gsub(/(http:\/\/[^ ]+)/,'<a href="#{1}">#{1}</a>').gsub(/@([^ ]+)/,function(match){return '@'+link_user(match[1])})
 }
-
-function linkTweetText(text){
-  return text.gsub(/(http:\/\/[^ ]+)/,'<a href="#{1}">#{1}</a>').gsub(/@([^ ]+)/,'@<a href="http://twitter.com/#{1}">#{1}</a>')
+function link_user(user_name)
+{
+return '<a href="http://twitter.com/'+user_name+'">'+user_name+'</a>'
 }
-
 /*
 generic twotwenty
 
